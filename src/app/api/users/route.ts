@@ -3,14 +3,48 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const users = await prisma.user.findMany({
-      include: {
-        address: true,
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const search = searchParams.get('search') || '';
+    const pageSize = 5;
+    const skip = (page - 1) * pageSize;
+
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        where: {
+          firstname: {
+            contains: search,
+          },
+        },
+        include: {
+          address: true,
+        },
+        take: pageSize,
+        skip: skip,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      prisma.user.count({
+        where: {
+          firstname: {
+            contains: search,
+          },
+        },
+      }),
+    ]);
+
+    return NextResponse.json({
+      users,
+      pagination: {
+        total,
+        pageSize,
+        currentPage: page,
+        totalPages: Math.ceil(total / pageSize),
       },
     });
-    return NextResponse.json(users);
   } catch (error) {
     console.error('Error fetching users:', error);
     return NextResponse.json(

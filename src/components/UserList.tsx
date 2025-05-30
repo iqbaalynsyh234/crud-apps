@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { toast } from 'sonner';
+import Swal from 'sweetalert2';
 import {
   Table,
   TableBody,
@@ -35,9 +37,10 @@ interface Pagination {
 
 interface UserListProps {
   onEdit: (user: User) => void;
+  refreshKey?: number;
 }
 
-export function UserList({ onEdit }: UserListProps) {
+export function UserList({ onEdit, refreshKey = 0 }: UserListProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     total: 0,
@@ -58,7 +61,7 @@ export function UserList({ onEdit }: UserListProps) {
 
   useEffect(() => {
     fetchUsers(pagination.currentPage, debouncedSearch);
-  }, [pagination.currentPage, debouncedSearch]);
+  }, [pagination.currentPage, debouncedSearch, refreshKey]);
 
   const fetchUsers = async (page: number, searchTerm: string) => {
     try {
@@ -72,15 +75,32 @@ export function UserList({ onEdit }: UserListProps) {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    });
+
+    if (!result.isConfirmed) return;
     
     try {
-      await fetch(`/api/users/${id}`, {
+      const response = await fetch(`/api/users/${id}`, {
         method: 'DELETE',
       });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      toast.success('User deleted successfully!');
       fetchUsers(pagination.currentPage, debouncedSearch);
     } catch (error) {
       console.error('Error deleting user:', error);
+      toast.error('Failed to delete user. Please try again.');
     }
   };
 

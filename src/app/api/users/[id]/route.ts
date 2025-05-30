@@ -1,10 +1,13 @@
-import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/src/generated/prisma';
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(
-  request: Request,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -31,7 +34,7 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -67,7 +70,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

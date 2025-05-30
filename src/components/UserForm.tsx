@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
-import { User, UserFormProps } from '@/type/usertype';
+import type { UserFormProps } from '@/type/usertype';
 import {
   Dialog,
   DialogContent,

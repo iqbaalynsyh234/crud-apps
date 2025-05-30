@@ -5,13 +5,7 @@ This is a [Next.js](https://nextjs.org) project using [shadcn/ui](https://ui.sha
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](./public/screenshots/dashboard.png)
-
-### Components Preview
-![Components](./public/screenshots/components.png)
-
-### Dark Mode
-![Dark Mode](./public/screenshots/dark-mode.png)
+![Dashboard](./public/screenshots/Capture.PNG)
 
 ## Prerequisites
 

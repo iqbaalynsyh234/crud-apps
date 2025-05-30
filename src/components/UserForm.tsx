@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -33,8 +34,21 @@ const formSchema = z.object({
   postalCode: z.string().min(5, 'Postal code must be at least 5 characters'),
 });
 
+interface User {
+  id: string;
+  firstname: string;
+  lastname: string;
+  birthdate: Date;
+  address?: {
+    street: string;
+    city: string;
+    province: string;
+    postalCode: string;
+  };
+}
+
 interface UserFormProps {
-  user?: any;
+  user?: User;
   onClose: () => void;
 }
 
@@ -95,9 +109,11 @@ export function UserForm({ user, onClose }: UserFormProps) {
         throw new Error('Failed to save user');
       }
 
+      toast.success(user ? 'User updated successfully!' : 'User created successfully!');
       onClose();
     } catch (error) {
       console.error('Error saving user:', error);
+      toast.error('Failed to save user. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

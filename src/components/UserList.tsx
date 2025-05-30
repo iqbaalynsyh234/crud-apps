@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
+import { User, UserListProps, Pagination } from '@/type/usertype';
 import Swal from 'sweetalert2';
 import {
   Table,
@@ -14,31 +15,6 @@ import {
 } from "@/components/ui/table";
 import { format } from 'date-fns';
 import { Input } from "@/components/ui/input";
-
-interface User {
-  id: string;
-  firstname: string;
-  lastname: string;
-  birthdate: Date;
-  address?: {
-    street: string;
-    city: string;
-    province: string;
-    postalCode: string;
-  };
-}
-
-interface Pagination {
-  total: number;
-  pageSize: number;
-  currentPage: number;
-  totalPages: number;
-}
-
-interface UserListProps {
-  onEdit: (user: User) => void;
-  refreshKey?: number;
-}
 
 export function UserList({ onEdit, refreshKey = 0 }: UserListProps) {
   const [users, setUsers] = useState<User[]>([]);

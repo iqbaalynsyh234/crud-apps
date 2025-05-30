@@ -5,20 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserList } from '@/components/UserList';
 import { UserForm } from '@/components/UserForm';
+import { User } from '@/type/usertype';
 import { Toaster } from 'sonner';
-
-interface User {
-  id: string;
-  firstname: string;
-  lastname: string;
-  birthdate: Date;
-  address?: {
-    street: string;
-    city: string;
-    province: string;
-    postalCode: string;
-  };
-}
 
 export default function Home() {
   const [isAddingUser, setIsAddingUser] = useState(false);

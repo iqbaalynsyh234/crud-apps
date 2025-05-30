@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
+import { User, UserFormProps } from '@/type/usertype';
 import {
   Dialog,
   DialogContent,
@@ -33,24 +34,6 @@ const formSchema = z.object({
   province: z.string().min(2, 'Province must be at least 2 characters'),
   postalCode: z.string().min(5, 'Postal code must be at least 5 characters'),
 });
-
-interface User {
-  id: string;
-  firstname: string;
-  lastname: string;
-  birthdate: Date;
-  address?: {
-    street: string;
-    city: string;
-    province: string;
-    postalCode: string;
-  };
-}
-
-interface UserFormProps {
-  user?: User;
-  onClose: () => void;
-}
 
 export function UserForm({ user, onClose }: UserFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);

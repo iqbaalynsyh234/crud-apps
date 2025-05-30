@@ -6,17 +6,13 @@ const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-type Props = {
-  params: { id: string }
-}
-
 export async function GET(
   request: NextRequest,
-  { params }: Props
+  context: { params: { id: string } }
 ) {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id: context.params.id },
       include: { address: true },
     });
 
@@ -39,14 +35,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: Props
+  context: { params: { id: string } }
 ) {
   try {
     const body = await request.json();
     const { firstname, lastname, birthdate, address } = body;
 
     const user = await prisma.user.update({
-      where: { id: params.id },
+      where: { id: context.params.id },
       data: {
         firstname,
         lastname,
@@ -75,11 +71,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: Props
+  context: { params: { id: string } }
 ) {
   try {
     await prisma.user.delete({
-      where: { id: params.id },
+      where: { id: context.params.id },
     });
 
     return new NextResponse(null, { status: 204 });

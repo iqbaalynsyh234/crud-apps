@@ -8,11 +8,11 @@ export const revalidate = 0;
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: context.params.id },
+      where: { id: params.id },
       include: { address: true },
     });
 
@@ -35,14 +35,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const body = await request.json();
     const { firstname, lastname, birthdate, address } = body;
 
     const user = await prisma.user.update({
-      where: { id: context.params.id },
+      where: { id: params.id },
       data: {
         firstname,
         lastname,
@@ -71,11 +71,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     await prisma.user.delete({
-      where: { id: context.params.id },
+      where: { id: params.id },
     });
 
     return new NextResponse(null, { status: 204 });
@@ -86,4 +86,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-} 
+}
